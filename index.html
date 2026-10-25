@@ -6,7 +6,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Poppins:wght@300;400;600&display=swap');
 body{margin:0;background:#ffeef2;font-family:'Poppins',sans-serif;color:#4a2a2a}
-.header{background:#ffeaef;padding:38px 15px;text-align:center;border-bottom:1px solid #ffd6dd}
+.header{background:#ffeaef;padding:38px 15px 22px;text-align:center;border-bottom:1px solid #ffd6dd}
 .header h1{font-family:'Cormorant Garamond',serif;letter-spacing:10px;font-size:36px;margin:0;color:#4a2a2a;font-weight:500}
 .header .sub{letter-spacing:6px;font-size:11px;color:#8a6a6a;margin:6px 0 14px;text-transform:lowercase}
 .header .slogan{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:3px;line-height:1.6}
@@ -15,6 +15,10 @@ body{margin:0;background:#ffeef2;font-family:'Poppins',sans-serif;color:#4a2a2a}
 .side.open{left:0}
 .side a{display:block;padding:14px 10px;text-decoration:none;color:#4a2a2a;border-bottom:1px solid #ffeaef;font-size:14px;letter-spacing:1px}
 .container{max-width:1100px;margin:0 auto;padding:18px}
+.filtros{display:flex;gap:8px;overflow-x:auto;padding:10px 0 16px;white-space:nowrap;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.filtros button{padding:8px 16px;border-radius:20px;border:1px solid #ffbfd0;background:#fff;color:#b07a7a;font-size:12px;letter-spacing:1px;cursor:pointer;flex-shrink:0}
+.filtros button.active{background:#ff6b8a;color:#fff;border-color:#ff6b8a;font-weight:600}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px}
 .card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px #0001;position:relative}
 .card img{width:100%;height:190px;object-fit:cover}
@@ -34,7 +38,7 @@ body{margin:0;background:#ffeef2;font-family:'Poppins',sans-serif;color:#4a2a2a}
 <h3 style="font-family:serif;letter-spacing:4px;color:#ff6b8a">VALE&LIA</h3>
 <a href="#" onclick="side.classList.remove('open')">✨ INICIO</a>
 <a href="#" onclick="side.classList.remove('open')">💎 CATÁLOGO</a>
-<a href="https://wa.me/5210000000000" target="_blank">💬 WHATSAPP</a>
+<a href="https://wa.me/526391776566" target="_blank">💬 WHATSAPP 6391776566</a>
 <a href="admin.html">🔒 ADMIN</a>
 </div>
 
@@ -45,6 +49,14 @@ body{margin:0;background:#ffeef2;font-family:'Poppins',sans-serif;color:#4a2a2a}
 </div>
 
 <div class="container">
+<div class="filtros" id="filtros">
+<button class="active" onclick="filtrar('todo',this)">TODO</button>
+<button onclick="filtrar('anillo',this)">ANILLO</button>
+<button onclick="filtrar('collar',this)">COLLAR</button>
+<button onclick="filtrar('pulso',this)">PULSO / PULSERA</button>
+<button onclick="filtrar('arete',this)">ARETES</button>
+<button onclick="filtrar('oferta',this)">OFERTAS</button>
+</div>
 <div id="grid" class="grid"></div>
 <p id="loading" style="text-align:center;color:#c89;padding:30px">Cargando joyería rosa...</p>
 </div>
@@ -52,16 +64,19 @@ body{margin:0;background:#ffeef2;font-family:'Poppins',sans-serif;color:#4a2a2a}
 <script>
 const BIN_ID = "PEGA_AQUI_TU_BIN_ID";
 const API_KEY = "PEGA_AQUI_TU_MASTER_KEY";
+const WHATSAPP = "526391776566";
+let TODOS = [];
 
 async function load(){
   try{
-    if(BIN_ID.includes('PEGA_AQUI')){ // modo local mientras no pones tu bin
-      let prods = JSON.parse(localStorage.getItem('vale_lia_prods')||'[]');
-      render(prods); return;
+    if(BIN_ID.includes('PEGA_AQUI')){
+      TODOS = JSON.parse(localStorage.getItem('vale_lia_prods')||'[]');
+      render(TODOS); return;
     }
     const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}});
     const d = await r.json();
-    render(d.record||[]);
+    TODOS = d.record||[];
+    render(TODOS);
   }catch(e){ loading.innerText='Agrega tu BIN ID en el código'; }
 }
 function render(prods){
@@ -71,8 +86,18 @@ function render(prods){
     const agot = p.status=='agotado';
     const ofe = p.isOffer || p.status=='oferta' || p.offerPrice;
     const badge = agot?'<div class="badge agotado">AGOTADO</div>':ofe?'<div class="badge oferta">OFERTA</div>':'';
-    return `<div class="card">${badge}<img src="${p.img}"><div class="info"><b>${p.name}</b><span class="desc">${p.desc||''}</span><span class="mat">${p.material||''}</span><span class="price">${p.offerPrice||p.price}${p.offerPrice?`<span class="old">${p.price}</span>`:''}</span><a class="btn ${agot?'agotado':''}" href="https://wa.me/5210000000000?text=Hola! Me interesa ${encodeURIComponent(p.name)}" target="_blank">${agot?'NO DISPONIBLE':'PEDIR POR WHATSAPP'}</a></div></div>`;
+    return `<div class="card">${badge}<img src="${p.img}"><div class="info"><b>${p.name}</b><span class="desc">${p.desc||''}</span><span class="mat">${(p.categoria||p.material||'').toUpperCase()}</span><span class="price">${p.offerPrice||p.price}${p.offerPrice?`<span class="old">${p.price}</span>`:''}</span><a class="btn ${agot?'agotado':''}" href="https://wa.me/${WHATSAPP}?text=Hola! Me interesa ${encodeURIComponent(p.name)}" target="_blank">${agot?'NO DISPONIBLE':'PEDIR WHATSAPP'}</a></div></div>`;
   }).join('');
+}
+function filtrar(cat,btn){
+  document.querySelectorAll('.filtros button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(cat=='todo') return render(TODOS);
+  if(cat=='oferta'){ render(TODOS.filter(p=>p.isOffer||p.status=='oferta'||p.offerPrice)); return; }
+  render(TODOS.filter(p=>{
+    let texto = (p.name+' '+(p.categoria||'')+' '+(p.desc||'')).toLowerCase();
+    return texto.includes(cat);
+  }));
 }
 load();
 </script>
