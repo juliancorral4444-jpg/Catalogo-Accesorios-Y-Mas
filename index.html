@@ -1,85 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vale&Lia</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VALE&LIA Accesorios y mas...</title>
 <style>
-body{margin:0;background:#fffafb;font-family:'Montserrat',sans-serif}
-header{display:flex;justify-content:center;align-items:center;padding:20px;background:#fff0f2;position:sticky;top:0;z-index:10}
-#menuBtn{position:absolute;left:16px;font-size:26px;background:none;border:none;color:#e8a0b0}
-header h1{margin:0;color:#e8a0b0;font-size:32px;font-family:'Cormorant Garamond',serif;letter-spacing:3px;text-align:center}
-header p{margin:0;font-size:10px;letter-spacing:4px;color:#c58a94;text-align:center}
-.banner{background:linear-gradient(90deg,#fff0f2,#ffe6ea,#fff0f2);text-align:center;padding:11px;color:#e8a0b0;font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:2px}
-.banner span{display:block;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:2px;color:#c58a94;margin-top:3px}
-#sidebar{position:fixed;top:0;left:-100%;width:280px;height:100%;background:#fff;z-index:20;transition:.3s;padding:20px}
-#sidebar.abierto{left:0}
-#sidebar button{width:100%;text-align:left;border:1px solid #f0c2cc;background:#fff;color:#a86b77;padding:12px;border-radius:12px;margin:5px 0}
-#sidebar button.activo{background:#e8a0b0;color:#fff}
-#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:15}#overlay.show{display:block}
-.catalogo{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;max-width:900px;margin:0 auto}
-.card{background:#fff;border-radius:18px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(232,160,176,.18);position:relative}
-.card.agotado img{filter:grayscale(1);opacity:.5}
-.etiqueta-oferta{position:absolute;top:10px;left:10px;background:#e8a0b0;color:#fff;font-size:9px;padding:5px 9px;border-radius:20px}
-.etiqueta-agotado{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.8);color:#fff;padding:8px 16px;border-radius:20px;font-size:11px}
-.card img{width:100%;height:165px;object-fit:cover;border-radius:12px}
-.btn-wa{display:block;margin-top:9px;background:#e8a0b0;color:#fff;padding:8px;border-radius:10px;font-size:11px}
-.btn-wa.agotado{background:#bbb}
-#btnAdd{display:none;position:fixed;bottom:22px;right:22px;background:#e8a0b0;color:#fff;border:none;width:60px;height:60px;border-radius:50%;font-size:30px;z-index:10}
-#modal,#modalDesc{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center;padding:20px;z-index:30}
-.box{background:#fff;width:100%;max-width:380px;padding:20px;border-radius:18px;max-height:90vh;overflow-y:auto}
-.box input,.box select,.box textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #f0c2cc;border-radius:10px;box-sizing:border-box;font-family:'Montserrat',sans-serif}
-.estado-group{display:flex;gap:8px;margin:12px 0}
-.estado-group button{flex:1;padding:14px 5px;border:2px solid #f0c2cc;background:#fff;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;text-align:center;line-height:1.2}
-.estado-group button.activo{border-color:#e8a0b0;background:#e8a0b0;color:#fff;transform:scale(1.05)}
+body{font-family:Arial;background:#fff0f6;margin:0}
+header{background:white;text-align:center;padding:25px;box-shadow:0 2px 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:10}
+header h1{margin:0;letter-spacing:3px}header h1 span{color:#e91e63}
+.tienda{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:15px;max-width:1000px;margin:20px auto;padding:15px}
+.card{background:white;border-radius:15px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.1);position:relative}
+.card.agotado{opacity:.5;filter:grayscale(1)}
+.card img{width:100%;height:170px;object-fit:cover;border-radius:10px}
+.badge{position:absolute;top:10px;left:10px;padding:4px 8px;border-radius:10px;font-size:11px;color:white;font-weight:bold}
+.badge-agotado{background:#333}.badge-pedido{background:#ff9800}.badge-disponible{background:#4caf50}
+.precio{color:#e91e63;font-weight:bold;font-size:18px;margin:5px 0}.material{font-size:11px;color:#999}
+.card button{background:#e91e63;color:white;border:none;padding:9px;border-radius:20px;width:100%;margin-top:8px;cursor:pointer}
+.card button:disabled{background:#ccc}
+#carrito{position:fixed;bottom:15px;right:15px;background:white;padding:15px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.2);width:280px}
 </style>
 </head>
 <body>
-<header><button id="menuBtn">☰</button><div><h1>VALE & LIA</h1><p>accesorios y mas</p></div><div style="position:absolute;right:16px">💎</div></header>
-<div class="banner">✦ BRILLA CON VALE&LIA ✦<span>ORO LAMINADO • PLATA • ACERO INOXIDABLE • CHAPA DE ORO</span></div>
-<div id="overlay"></div>
-<div id="sidebar"><button data-f="todos" class="activo">Todos</button><button data-f="oferta">💖 Ofertas</button><button data-f="anillos">Anillos</button><button data-f="cadenas">Cadenas</button><button data-f="aretes">Aretes</button><button data-f="pulseras">Pulsos y Pulseras</button><button data-f="mas">Y más</button><button data-f="agotado">❌ Agotados</button><button onclick="sidebar.classList.remove('abierto');overlay.classList.remove('show')" style="margin-top:15px;background:#f5f5f5;text-align:center">Cerrar</button></div>
-<div class="catalogo" id="catalogo"></div>
-<button id="btnAdd">+</button>
-<div id="modal"><div class="box">
-<h3 style="color:#e8a0b0;margin:0 0 10px;font-family:'Cormorant Garamond',serif">Producto</h3>
-<input type="file" id="foto" accept="image/*">
-<input type="text" id="nombre" placeholder="Nombre">
-<input type="text" id="precio" placeholder="Precio $">
-<input type="text" id="precioAntes" placeholder="Precio antes (oferta)">
-<textarea id="desc" placeholder="Descripción"></textarea>
-<select id="cat"><option value="anillos">Anillos</option><option value="cadenas">Cadenas</option><option value="aretes">Aretes</option><option value="pulseras">Pulsos y Pulseras</option><option value="mas otros">Y más</option></select>
-<p style="font-size:11px;font-weight:700;color:#c58a94;margin:14px 0 6px;letter-spacing:1px">ESTADO DEL PRODUCTO:</p>
-<div class="estado-group">
-<button type="button" id="btnDisp" onclick="setEstado('disponible')" class="activo">✅<br>DISPONIBLE</button>
-<button type="button" id="btnOferta" onclick="setEstado('oferta')">💖<br>OFERTA</button>
-<button type="button" id="btnAgotado" onclick="setEstado('agotado')">❌<br>AGOTADO</button>
-</div>
-<button onclick="guardar()" id="btnGuardar" style="width:100%;background:#e8a0b0;color:#fff;border:none;padding:13px;border-radius:12px;margin-top:10px;font-weight:700">GUARDAR PRODUCTO</button>
-<button onclick="cerrarModal()" style="width:100%;background:#eee;border:none;padding:10px;border-radius:10px;margin-top:8px">Cancelar</button>
-</div></div>
-<div id="modalDesc"><div class="box" id="boxDesc"></div></div>
+<header><h1><span>VALE&LIA</span> Accesorios y mas...</h1></header>
+<div class="tienda" id="tienda">Cargando joyería...</div>
+<div id="carrito"><h3 style="margin:0">🛒 Carrito</h3><div id="lista-carrito" style="font-size:13px;margin:5px 0">Vacío</div><div id="total" style="font-weight:bold">Total: $0</div><button onclick="mandarWhats()" style="background:#25D366;color:white;border:none;padding:12px;width:100%;border-radius:10px;margin-top:10px;font-weight:bold;cursor:pointer">Pedir por WhatsApp</button></div>
 <script>
-const firebaseConfig={apiKey:"AQUÍ VA TU APIKEY",authDomain:"AQUÍ VA",projectId:"AQUÍ VA",storageBucket:"AQUÍ VA",messagingSenderId:"AQUÍ VA",appId:"AQUÍ VA"};
-firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
-const PASS="valelia123";let productos=[],filtroActual="todos",fotoTmp="",editandoId=null,esAdmin=false,estadoActual="disponible";
-const catalogo=document.getElementById('catalogo'),modal=document.getElementById('modal'),modalDesc=document.getElementById('modalDesc'),btnAdd=document.getElementById('btnAdd'),sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay'),menuBtn=document.getElementById('menuBtn');
-if(location.search.includes("admin")){let c=prompt("Contraseña:");if(c===PASS){esAdmin=true;btnAdd.style.display="block"}}
-menuBtn.onclick=()=>{sidebar.classList.add('abierto');overlay.classList.add('show')}
-overlay.onclick=()=>{sidebar.classList.remove('abierto');overlay.classList.remove('show');modalDesc.style.display='none'}
-function setEstado(est){estadoActual=est;document.querySelectorAll('.estado-group button').forEach(b=>b.classList.remove('activo'));if(est==='disponible')document.getElementById('btnDisp').classList.add('activo');if(est==='oferta')document.getElementById('btnOferta').classList.add('activo');if(est==='agotado')document.getElementById('btnAgotado').classList.add('activo');}
-document.getElementById('foto').addEventListener('change',e=>{let f=e.target.files[0];let r=new FileReader();r.onload=ev=>{let img=new Image();img.onload=()=>{let cv=document.createElement('canvas');let M=700,w=img.width,h=img.height;if(w>h){if(w>M){h*=M/w;w=M}}else{if(h>M){w*=M/h;h=M}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);fotoTmp=cv.toDataURL('image/jpeg',0.75)};img.src=ev.target.result};r.readAsDataURL(f)});
-btnAdd.onclick=()=>{editandoId=null;fotoTmp="";["nombre","precio","precioAntes","desc"].forEach(id=>document.getElementById(id).value="");setEstado('disponible');modal.style.display="flex"}
-function cerrarModal(){modal.style.display="none";fotoTmp="";editandoId=null}
-async function guardar(){let n=document.getElementById('nombre').value,p=document.getElementById('precio').value,pa=document.getElementById('precioAntes').value,cat=document.getElementById('cat').value,d=document.getElementById('desc').value;if(!n||!p){alert("Falta nombre/precio");return}let esOferta=estadoActual==='oferta',esAgotado=estadoActual==='agotado';document.getElementById('btnGuardar').innerText="Guardando...";try{if(editandoId){let data={nombre:n,precio:p,antes:pa,cat:cat,oferta:esOferta,agotado:esAgotado,estado:estadoActual,desc:d};if(fotoTmp)data.foto=fotoTmp;await db.collection("productos").doc(editandoId).update(data);}else{if(!fotoTmp){alert("Pon foto");document.getElementById('btnGuardar').innerText="GUARDAR PRODUCTO";return}await db.collection("productos").add({nombre:n,precio:p,antes:pa,cat:cat,foto:fotoTmp,oferta:esOferta,agotado:esAgotado,estado:estadoActual,desc:d,fecha:Date.now()});}cerrarModal();}catch(e){alert(e.message)}document.getElementById('btnGuardar').innerText="GUARDAR PRODUCTO";}
-async function borrar(id){if(!confirm("¿Borrar?"))return;await db.collection("productos").doc(id).delete()}
-function editar(id){let pr=productos.find(x=>x.id===id);editandoId=id;document.getElementById('nombre').value=pr.nombre;document.getElementById('precio').value=pr.precio;document.getElementById('precioAntes').value=pr.antes||"";document.getElementById('desc').value=pr.desc||"";document.getElementById('cat').value=pr.cat;setEstado(pr.estado|| (pr.agotado?'agotado':pr.oferta?'oferta':'disponible'));fotoTmp="";modal.style.display="flex"}
-function verDesc(id){let pr=productos.find(x=>x.id===id);let btn=pr.agotado?`<div style="background:#bbb;color:#fff;text-align:center;padding:13px;border-radius:12px">AGOTADO</div>`:`<a target="_blank" href="https://wa.me/5216391776566?text=Hola%20Vale%26Lia%20me%20interesa%20${encodeURIComponent(pr.nombre)}" style="display:block;background:#25D366;color:#fff;text-align:center;padding:13px;border-radius:12px;text-decoration:none;font-weight:600">Pedir WhatsApp</a>`;document.getElementById('boxDesc').innerHTML=`<img src="${pr.foto}" style="width:100%;border-radius:14px"><h2 style="font-family:'Cormorant Garamond',serif;color:#e8a0b0">${pr.nombre}</h2><span style="color:#e8a0b0;font-weight:600">$${pr.precio}</span><p style="background:#fff5f6;padding:12px;border-radius:10px;white-space:pre-wrap">${pr.desc||''}</p>${btn}<button onclick="document.getElementById('modalDesc').style.display='none'" style="width:100%;background:#eee;border:none;padding:11px;border-radius:10px;margin-top:10px">Cerrar</button>`;modalDesc.style.display="flex"}
-function render(f){filtroActual=f;catalogo.innerHTML="";let lista=productos.filter(p=>{if(f==="agotado")return p.agotado;if(!esAdmin&&p.agotado)return false;if(f==="todos")return true;if(f==="pulseras")return p.cat.includes("pulsera")||p.cat.includes("pulso");if(f==="oferta")return p.oferta;return p.cat.includes(f)});lista.forEach(pr=>{let etO=pr.oferta?`<div class="etiqueta-oferta">OFERTA</div>`:"";let etA=pr.agotado?`<div class="etiqueta-agotado">AGOTADO</div>`:"";let admin=esAdmin?`<div style="display:flex;gap:6px;margin-top:8px"><button style="flex:1;background:#ffe4e8;color:#e8a0b0;border:none;border-radius:8px;padding:7px" onclick="editar('${pr.id}')">Editar</button><button style="flex:1;background:#ff4444;color:#fff;border:none;border-radius:8px;padding:7px" onclick="borrar('${pr.id}')">Borrar</button></div>`:"";catalogo.innerHTML+=`<div class="card ${pr.agotado?'agotado':''}"><img src="${pr.foto}" onclick="verDesc('${pr.id}')"><h3>${pr.nombre}</h3><span>$${pr.precio}</span><div class="btn-wa ${pr.agotado?'agotado':''}" onclick="verDesc('${pr.id}')">${pr.agotado?'Agotado':'Ver detalles'}</div>${etO}${etA}${admin}</div>`})}
-document.querySelectorAll('#sidebar button[data-f]').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('#sidebar button').forEach(x=>x.classList.remove('activo'));b.classList.add('activo');render(b.dataset.f);sidebar.classList.remove('abierto');overlay.classList.remove('show')})})
-db.collection("productos").orderBy("fecha","desc").onSnapshot(s=>{productos=[];s.forEach(d=>{productos.push({id:d.id,...d.data()})});render(filtroActual)})
+const BIN_ID="6ade92ceac6210605a51659c";
+const API_KEY="$2a$10$BHdEFL3G9QNR1VbRAXpJ.dwX7sgzGUata6vJIIhg/I8fUrVlYS.u";
+const API_URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const WHATS="526391776566";
+let productos=[],carrito=[],total=0;
+async function cargar(){
+ let r=await fetch(`${API_URL}/latest`,{headers:{"X-Master-Key":API_KEY}});
+ let j=await r.json(); let data=j.record;
+ productos = data.productos || (Array.isArray(data)?data:[]);
+ render();
+}
+function render(){
+ let c=document.getElementById('tienda');c.innerHTML="";
+ if(productos.length==0){c.innerHTML="<p>No hay productos aún, ve al admin</p>";return}
+ productos.forEach(p=>{
+  c.innerHTML+=`<div class="card ${p.estado=='agotado'?'agotado':''}"><div class="badge badge-${p.estado}">${p.estado.toUpperCase()}</div><img src="${p.foto}"><h3 style="font-size:14px;margin:8px 0 2px">${p.nombre}</h3><div class="material">${p.material||''}</div><div class="precio">$${p.precio}</div><button ${p.estado=='agotado'?'disabled':''} onclick="agregar(${p.id})">${p.estado=='agotado'?'Agotado':'Agregar'}</button></div>`;
+ });
+}
+function agregar(id){let p=productos.find(x=>x.id==id);carrito.push(p);total+=parseInt(p.precio);act();}
+function act(){document.getElementById('lista-carrito').innerHTML=carrito.length==0?"Vacío":carrito.map(x=>`• ${x.nombre} $${x.precio}`).join('<br>');document.getElementById('total').innerText=`Total: $${total}`;}
+function mandarWhats(){if(carrito.length==0)return alert("Carrito vacío");let msg="Hola VALE&LIA! Quiero:%0A"+carrito.map(c=>`- ${c.nombre} $${c.precio}`).join('%0A')+`%0ATotal: $${total}`;window.open(`https://wa.me/${WHATS}?text=${msg}`,'_blank');carrito=[];total=0;act();}
+cargar();
 </script>
 </body>
 </html>
