@@ -49,3 +49,52 @@ cargar();
 </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin VALE&LIA</title>
+<style>body{font-family:Arial;max-width:700px;margin:20px auto;padding:15px;background:#fff0f6} .box{background:white;padding:20px;border-radius:15px} input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;box-sizing:border-box} button{background:#e91e63;color:white;border:none;padding:12px;border-radius:10px;width:100%;cursor:pointer;margin-top:8px;font-weight:bold} .item{border:1px solid #eee;padding:10px;border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between}</style></head>
+<body>
+<div class="box">
+<h2>Admin VALE&LIA - Nube</h2>
+<div id="login"><input id="pass" type="password" placeholder="Contraseña admin"><button onclick="login()">Entrar</button></div>
+<div id="panel" style="display:none">
+<input id="a_nombre" placeholder="Nombre ej: Anillo Corazón"><input id="a_precio" type="number" placeholder="Precio"><input id="a_material" placeholder="Material ej: Acero inoxidable"><input id="a_foto" placeholder="Link de foto o nombre.jpg"><select id="a_estado"><option value="disponible">Disponible</option><option value="agotado">Agotado</option><option value="pedido">Por Pedido</option></select>
+<button onclick="guardar()">💾 Guardar en la nube</button>
+<div id="lista" style="margin-top:20px"></div>
+</div>
+</div>
+<script>
+const BIN_ID="6ade92ceac6210605a51659c";
+const API_KEY="$2a$10$BHdEFL3G9QNR1VbRAXpJ.dwX7sgzGUata6vJIIhg/I8fUrVlYS.u";
+const API_URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`;
+let productos=[],editId=null;
+function login(){if(document.getElementById('pass').value=="valelia"){document.getElementById('login').style.display='none';document.getElementById('panel').style.display='block';cargar();}else alert("Mal")}
+async function cargar(){
+ let r=await fetch(`${API_URL}/latest`,{headers:{"X-Master-Key":API_KEY}});
+ let j=await r.json(); let data=j.record;
+ productos=data.productos|| (Array.isArray(data)?data:[]);
+ render();
+}
+function render(){
+ let l=document.getElementById('lista');l.innerHTML=`<h3>${productos.length} productos en la nube</h3>`;
+ productos.forEach(p=>{
+  l.innerHTML+=`<div class="item"><div><b>${p.nombre}</b><br>$${p.precio} - ${p.estado}<br><small>${p.material}</small></div><div><button onclick="editar(${p.id})" style="width:auto;padding:5px 10px">✏️</button><button onclick="borrar(${p.id})" style="width:auto;padding:5px 10px;background:#333">🗑️</button></div></div>`;
+ });
+}
+function editar(id){let p=productos.find(x=>x.id==id);document.getElementById('a_nombre').value=p.nombre;document.getElementById('a_precio').value=p.precio;document.getElementById('a_material').value=p.material;document.getElementById('a_foto').value=p.foto;document.getElementById('a_estado').value=p.estado;editId=id;window.scrollTo(0,0)}
+async function borrar(id){if(!confirm("Borrar?"))return;productos=productos.filter(x=>x.id!=id);await subir();}
+async function guardar(){
+ let n=document.getElementById('a_nombre').value,pr=document.getElementById('a_precio').value,m=document.getElementById('a_material').value,f=document.getElementById('a_foto').value,e=document.getElementById('a_estado').value;
+ if(!n||!pr)return alert("Nombre y precio");
+ if(editId){let p=productos.find(x=>x.id==editId);p.nombre=n;p.precio=pr;p.material=m;if(f)p.foto=f;p.estado=e;editId=null;}
+ else{productos.push({id:Date.now(),nombre:n,precio:parseInt(pr),material:m,foto:f||"https://via.placeholder.com/300?text=Foto",estado:e,ventas:0})}
+ document.getElementById('a_nombre').value="";document.getElementById('a_precio').value="";document.getElementById('a_material').value="";document.getElementById('a_foto').value="";
+ await subir();
+}
+async function subir(){
+ await fetch(API_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify({productos:productos})});
+ alert("¡Guardado en la nube! Ya lo ven tus clientas");render();
+}
+</script>
+</body></html>
+
