@@ -1,100 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VALE&LIA Accesorios y mas...</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VALE & LIA - Accesorios y mas</title>
 <style>
-body{font-family:Arial;background:#fff0f6;margin:0}
-header{background:white;text-align:center;padding:25px;box-shadow:0 2px 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:10}
-header h1{margin:0;letter-spacing:3px}header h1 span{color:#e91e63}
-.tienda{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:15px;max-width:1000px;margin:20px auto;padding:15px}
-.card{background:white;border-radius:15px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.1);position:relative}
-.card.agotado{opacity:.5;filter:grayscale(1)}
-.card img{width:100%;height:170px;object-fit:cover;border-radius:10px}
-.badge{position:absolute;top:10px;left:10px;padding:4px 8px;border-radius:10px;font-size:11px;color:white;font-weight:bold}
-.badge-agotado{background:#333}.badge-pedido{background:#ff9800}.badge-disponible{background:#4caf50}
-.precio{color:#e91e63;font-weight:bold;font-size:18px;margin:5px 0}.material{font-size:11px;color:#999}
-.card button{background:#e91e63;color:white;border:none;padding:9px;border-radius:20px;width:100%;margin-top:8px;cursor:pointer}
-.card button:disabled{background:#ccc}
-#carrito{position:fixed;bottom:15px;right:15px;background:white;padding:15px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.2);width:280px}
-</style>
-</head>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400&display=swap');
+body{margin:0;background:#fdf6f2;font-family:'Montserrat',sans-serif}
+.header{background:#f9e8e0;padding:50px 20px;text-align:center;}
+.header h1{font-family:'Cormorant Garamond',serif;font-weight:400;letter-spacing:8px;color:#5a3a3a;margin:0;font-size:38px}
+.header p.sub{letter-spacing:4px;color:#8a6a6a;font-size:12px;margin:5px 0 20px;text-transform:lowercase}
+.header p.slogan{font-family:'Cormorant Garamond',serif;letter-spacing:3px;color:#5a3a3a;font-size:13px;margin:0}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px}
+.card{background:#fff;border-radius:4px;overflow:hidden;position:relative;box-shadow:0 2px 10px #0001}
+.card img{width:100%;height:210px;object-fit:cover}
+.badge{position:absolute;top:10px;left:10px;padding:4px 10px;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px}
+.oferta{background:#b85c5c} .agotado{background:#333}
+.info{padding:12px} .info b{font-family:'Cormorant Garamond',serif;font-size:16px;color:#333}
+.info small.desc{color:#888;font-size:11px;display:block;margin:4px 0}
+.info small.mat{background:#fdf0e9;padding:3px 7px;border-radius:10px;font-size:9px;letter-spacing:1px;color:#8a6a6a}
+.price{font-weight:600;color:#5a3a3a;margin-top:6px;display:block} .old{text-decoration:line-through;color:#bbb;font-size:11px;margin-left:6px}
+.btn-whats{display:block;margin-top:10px;background:#5a3a3a;color:#fff;text-align:center;padding:9px;text-decoration:none;font-size:12px;letter-spacing:1px}
+#loading{text-align:center;color:#b99;padding:40px}
+</style></head>
 <body>
-<header><h1><span>VALE&LIA</span> Accesorios y mas...</h1></header>
-<div class="tienda" id="tienda">Cargando joyería...</div>
-<div id="carrito"><h3 style="margin:0">🛒 Carrito</h3><div id="lista-carrito" style="font-size:13px;margin:5px 0">Vacío</div><div id="total" style="font-weight:bold">Total: $0</div><button onclick="mandarWhats()" style="background:#25D366;color:white;border:none;padding:12px;width:100%;border-radius:10px;margin-top:10px;font-weight:bold;cursor:pointer">Pedir por WhatsApp</button></div>
-<script>
-const BIN_ID="6ade92ceac6210605a51659c";
-const API_KEY="$2a$10$BHdEFL3G9QNR1VbRAXpJ.dwX7sgzGUata6vJIIhg/I8fUrVlYS.u";
-const API_URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`;
-const WHATS="526391776566";
-let productos=[],carrito=[],total=0;
-async function cargar(){
- let r=await fetch(`${API_URL}/latest`,{headers:{"X-Master-Key":API_KEY}});
- let j=await r.json(); let data=j.record;
- productos = data.productos || (Array.isArray(data)?data:[]);
- render();
-}
-function render(){
- let c=document.getElementById('tienda');c.innerHTML="";
- if(productos.length==0){c.innerHTML="<p>No hay productos aún, ve al admin</p>";return}
- productos.forEach(p=>{
-  c.innerHTML+=`<div class="card ${p.estado=='agotado'?'agotado':''}"><div class="badge badge-${p.estado}">${p.estado.toUpperCase()}</div><img src="${p.foto}"><h3 style="font-size:14px;margin:8px 0 2px">${p.nombre}</h3><div class="material">${p.material||''}</div><div class="precio">$${p.precio}</div><button ${p.estado=='agotado'?'disabled':''} onclick="agregar(${p.id})">${p.estado=='agotado'?'Agotado':'Agregar'}</button></div>`;
- });
-}
-function agregar(id){let p=productos.find(x=>x.id==id);carrito.push(p);total+=parseInt(p.precio);act();}
-function act(){document.getElementById('lista-carrito').innerHTML=carrito.length==0?"Vacío":carrito.map(x=>`• ${x.nombre} $${x.precio}`).join('<br>');document.getElementById('total').innerText=`Total: $${total}`;}
-function mandarWhats(){if(carrito.length==0)return alert("Carrito vacío");let msg="Hola VALE&LIA! Quiero:%0A"+carrito.map(c=>`- ${c.nombre} $${c.precio}`).join('%0A')+`%0ATotal: $${total}`;window.open(`https://wa.me/${WHATS}?text=${msg}`,'_blank');carrito=[];total=0;act();}
-cargar();
-</script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin VALE&LIA</title>
-<style>body{font-family:Arial;max-width:700px;margin:20px auto;padding:15px;background:#fff0f6} .box{background:white;padding:20px;border-radius:15px} input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;box-sizing:border-box} button{background:#e91e63;color:white;border:none;padding:12px;border-radius:10px;width:100%;cursor:pointer;margin-top:8px;font-weight:bold} .item{border:1px solid #eee;padding:10px;border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between}</style></head>
-<body>
-<div class="box">
-<h2>Admin VALE&LIA - Nube</h2>
-<div id="login"><input id="pass" type="password" placeholder="Contraseña admin"><button onclick="login()">Entrar</button></div>
-<div id="panel" style="display:none">
-<input id="a_nombre" placeholder="Nombre ej: Anillo Corazón"><input id="a_precio" type="number" placeholder="Precio"><input id="a_material" placeholder="Material ej: Acero inoxidable"><input id="a_foto" placeholder="Link de foto o nombre.jpg"><select id="a_estado"><option value="disponible">Disponible</option><option value="agotado">Agotado</option><option value="pedido">Por Pedido</option></select>
-<button onclick="guardar()">💾 Guardar en la nube</button>
-<div id="lista" style="margin-top:20px"></div>
+<div class="header">
+<h1>VALE & LIA</h1>
+<p class="sub">accesorios y mas</p>
+<p class="slogan">✦ BRILLA CON VALE&LIA ✦<br><br>ORO LAMINADO · PLATA · ACERO INOXIDABLE · CHAPA DE ORO</p>
 </div>
-</div>
+<div class="container"><div id="grid" class="grid"></div><p id="loading">Cargando joyería...</p></div>
 <script>
-const BIN_ID="6ade92ceac6210605a51659c";
-const API_KEY="$2a$10$BHdEFL3G9QNR1VbRAXpJ.dwX7sgzGUata6vJIIhg/I8fUrVlYS.u";
-const API_URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`;
-let productos=[],editId=null;
-function login(){if(document.getElementById('pass').value=="valelia"){document.getElementById('login').style.display='none';document.getElementById('panel').style.display='block';cargar();}else alert("Mal")}
-async function cargar(){
- let r=await fetch(`${API_URL}/latest`,{headers:{"X-Master-Key":API_KEY}});
- let j=await r.json(); let data=j.record;
- productos=data.productos|| (Array.isArray(data)?data:[]);
- render();
-}
-function render(){
- let l=document.getElementById('lista');l.innerHTML=`<h3>${productos.length} productos en la nube</h3>`;
- productos.forEach(p=>{
-  l.innerHTML+=`<div class="item"><div><b>${p.nombre}</b><br>$${p.precio} - ${p.estado}<br><small>${p.material}</small></div><div><button onclick="editar(${p.id})" style="width:auto;padding:5px 10px">✏️</button><button onclick="borrar(${p.id})" style="width:auto;padding:5px 10px;background:#333">🗑️</button></div></div>`;
- });
-}
-function editar(id){let p=productos.find(x=>x.id==id);document.getElementById('a_nombre').value=p.nombre;document.getElementById('a_precio').value=p.precio;document.getElementById('a_material').value=p.material;document.getElementById('a_foto').value=p.foto;document.getElementById('a_estado').value=p.estado;editId=id;window.scrollTo(0,0)}
-async function borrar(id){if(!confirm("Borrar?"))return;productos=productos.filter(x=>x.id!=id);await subir();}
-async function guardar(){
- let n=document.getElementById('a_nombre').value,pr=document.getElementById('a_precio').value,m=document.getElementById('a_material').value,f=document.getElementById('a_foto').value,e=document.getElementById('a_estado').value;
- if(!n||!pr)return alert("Nombre y precio");
- if(editId){let p=productos.find(x=>x.id==editId);p.nombre=n;p.precio=pr;p.material=m;if(f)p.foto=f;p.estado=e;editId=null;}
- else{productos.push({id:Date.now(),nombre:n,precio:parseInt(pr),material:m,foto:f||"https://via.placeholder.com/300?text=Foto",estado:e,ventas:0})}
- document.getElementById('a_nombre').value="";document.getElementById('a_precio').value="";document.getElementById('a_material').value="";document.getElementById('a_foto').value="";
- await subir();
-}
-async function subir(){
- await fetch(API_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify({productos:productos})});
- alert("¡Guardado en la nube! Ya lo ven tus clientas");render();
-}
+const BIN_ID = "PEGA_AQUI_TU_BIN_ID";
+const API_KEY = "PEGA_AQUI_TU_MASTER_KEY";
+async function load(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}});
+    const data = await res.json(); const prods = data.record || [];
+    document.getElementById('loading').style.display='none';
+    if(prods.length==0){document.getElementById('grid').innerHTML='<p style="text-align:center;color:#b99;width:100%">Aún no hay productos, agrega en tu admin</p>';return}
+    document.getElementById('grid').innerHTML = prods.map(p=>{
+      const agot = p.status=='agotado'; const ofe = p.isOffer || p.status=='oferta';
+      const badge = agot?'<div class="badge agotado">AGOTADO</div>':ofe?'<div class="badge oferta">OFERTA</div>':'';
+      return `<div class="card">${badge}<img src="${p.img}"><div class="info"><b>${p.name}</b><small class="desc">${p.desc||''}</small><small class="mat">${p.material||''}</small><span class="price">${p.offerPrice||p.price}${p.offerPrice?`<span class="old">${p.price}</span>`:''}</span><a class="btn-whats" href="https://wa.me/5210000000000?text=Hola! Me interesa ${encodeURIComponent(p.name)}" target="_blank">${agot?'NO DISPONIBLE':'PEDIR POR WHATSAPP'}</a></div></div>`;
+    }).join('');
+  }catch(e){document.getElementById('loading').innerText='Error: Revisa tu BIN ID y KEY en el código';}
+} load();
 </script>
 </body></html>
-
