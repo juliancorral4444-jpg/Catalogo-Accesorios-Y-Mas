@@ -5,21 +5,75 @@
 <title>VALE & LIA</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400&display=swap');
-body{margin:0;background:#ffeef2;font-family:'Montserrat',sans-serif;color:#4a2a2a}
-.header{background:linear-gradient(180deg,#ffeaef 0%,#ffe4eb 100%);padding:55px 20px 35px;text-align:center;border-bottom:1px solid #f8d4dc}
-.header h1{font-family:'Cormorant Garamond',serif;letter-spacing:12px;font-size:38px;margin:0;color:#3d2424;font-weight:500}
-.header .sub{letter-spacing:8px;font-size:10px;color:#a07a7a;margin:10px 0 20px;text-transform:lowercase}
-.header .slogan{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:4px;line-height:1.8}
-.menu-btn{position:fixed;top:18px;left:18px;z-index:99;background:rgba(255,255,255,0.9);backdrop-filter:blur(10px);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px #0001;font-size:22px;cursor:pointer;border:1px solid #ffe0e6}
-.side{position:fixed;top:0;left:-300px;width:285px;height:100%;background:#fffcfc;z-index:100;transition:.4s cubic-bezier(0.16,1,0.3,1);box-shadow:0 0 40px #0001;overflow-y:auto}
+body{margin:0;background:#fffffe;font-family:'Montserrat',sans-serif;color:#3d2424}
+.header{background:#ffeaef;padding:55px 20px 35px;text-align:center}
+.header h1{font-family:'Cormorant Garamond',serif;letter-spacing:14px;font-size:36px;margin:0;color:#3d2424;font-weight:400}
+.header .sub{letter-spacing:8px;font-size:10px;color:#a08080;margin:10px 0 22px;text-transform:lowercase}
+.header .slogan{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:4px;color:#7a5a5a;line-height:2}
+.menu-btn{position:fixed;top:18px;left:18px;z-index:99;background:#fff;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px #0001;font-size:20px;cursor:pointer}
+.side{position:fixed;top:0;left:-300px;width:285px;height:100%;background:#fff;z-index:100;transition:.4s;box-shadow:0 0 40px #0001;overflow-y:auto}
 .side.open{left:0}
-.side-top{padding:28px 26px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffeaef}
-.side-top b{font-family:'Cormorant Garamond',serif;letter-spacing:6px;color:#ff8fa3;font-size:18px}
-.side-close{font-size:18px;cursor:pointer;color:#b08a8a;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#fff5f7}
-.side-section{padding:18px 26px}
-.side-section h4{font-size:10px;letter-spacing:3px;color:#c9a0a8;margin:0 0 12px;font-weight:500}
-.side-section a{display:block;padding:12px 0;text-decoration:none;color:#5a3a3a;border-bottom:1px solid #fff0f3;font-size:11px;letter-spacing:2.5px}
-.filtros-menu{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-.filtros-menu button{padding:11px 16px;border-radius:25px;border:1px solid #ffd1d9;background:#fff;color:#8a6a6a;font-size:10px;letter-spacing:2px;cursor:pointer;text-align:left;font-family:'Montserrat';transition:.3s}
+.side-top{padding:28px 26px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f5ea}
+.side-top b{font-family:'Cormorant Garamond',serif;letter-spacing:6px;color:#3d2424;font-size:16px}
+.side-close{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:#faf2f2;border-radius:50%;cursor:pointer}
+.side-section{padding:20px 26px}
+.side-section h4{font-size:9px;letter-spacing:3px;color:#c9a0a0;margin:0 0 14px}
+.side-section a{font-size:11px;letter-spacing:2.5px;color:#5a3a3a;text-decoration:none;display:block;padding:12px 0;border-bottom:1px solid #faf2f2}
+.filtros-menu{display:flex;flex-direction:column;gap:9px}
+.filtros-menu button{padding:12px 18px;border-radius:30px;border:1px solid #eee0e0;background:#fff;color:#6a4a4a;font-size:10px;letter-spacing:2px;cursor:pointer;text-align:left;transition:.3s}
 .filtros-menu button.active{background:#3d2424;color:#fff;border-color:#3d2424}
-.container{max-width:1100px;margin:
+.container{max-width:1100px;margin:0 auto;padding:0 14px 30px;background:#fffffe}
+.current{font-size:9px;letter-spacing:4px;color:#b09090;text-align:center;margin:24px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.card{background:#fff;border-radius:4px;overflow:hidden;border:1px solid #f6ecec;position:relative}
+.card img{width:100%;height:210px;object-fit:cover}
+.badge{position:absolute;top:8px;left:8px;padding:4px 10px;color:#fff;font-size:7px;letter-spacing:1px}
+.oferta{background:#3d2424} .agotado{background:#bbb}
+.info{padding:12px} .info b{font-family:'Cormorant Garamond',serif;font-size:14px;color:#3d2424;font-weight:600}
+.info .desc{font-size:9px;color:#9a8080;display:block;margin:4px 0}
+.info .mat{font-size:7px;letter-spacing:1px;color:#b09090;border:1px solid #f0d8d8;padding:2px 7px;border-radius:10px}
+.price{font-family:'Cormorant Garamond',serif;color:#3d2424;font-weight:600;margin-top:6px;display:block} .old{font-family:'Montserrat';color:#bbb;text-decoration:line-through;font-size:10px;margin-left:5px}
+.btn{display:block;margin-top:10px;border:1px solid #3d2424;color:#3d2424;text-align:center;padding:9px;text-decoration:none;font-size:9px;letter-spacing:2px;transition:.3s}
+.btn:hover{background:#3d2424;color:#fff}
+.btn.agotado{border-color:#e0e0e0;color:#bbb;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="menu-btn" onclick="side.classList.toggle('open')">☰</div>
+<div class="side" id="side">
+<div class="side-top"><b>VALE & LIA</b><div class="side-close" onclick="side.classList.remove('open')">✕</div></div>
+<div class="side-section">
+<h4>MENÚ</h4>
+<a href="#" onclick="filtrar('todo',null)">INICIO</a>
+</div>
+<div class="side-section">
+<h4>FILTRAR POR</h4>
+<div class="filtros-menu">
+<button class="active" onclick="filtrar('todo',this)">TODOS</button>
+<button onclick="filtrar('anillo',this)">ANILLOS</button>
+<button onclick="filtrar('collar',this)">COLLARES</button>
+<button onclick="filtrar('pulso',this)">PULSOS</button>
+<button onclick="filtrar('arete',this)">ARETES</button>
+<button onclick="filtrar('oferta',this)">OFERTAS</button>
+</div>
+</div>
+</div>
+
+<div class="header">
+<h1>VALE & LIA</h1>
+<p class="sub">accesorios y mas</p>
+<p class="slogan">✦ BRILLA CON VALE&LIA ✦<br>ORO LAMINADO · PLATA · ACERO INOXIDABLE · CHAPA DE ORO</p>
+</div>
+
+<div class="container">
+<p class="current" id="currentFilter">COLECCIÓN COMPLETA</p>
+<div id="grid" class="grid"></div>
+<p id="loading" style="text-align:center;color:#c9a0a0;font-size:10px;letter-spacing:2px;margin-top:40px">Cargando colección...</p>
+</div>
+
+<script>
+const BIN_ID="PEGA_AQUI_TU_BIN_ID";const API_KEY="PEGA_AQUI_TU_MASTER_KEY";const WHATSAPP="526391776566";let TODOS=[];
+async function load(){try{if(BIN_ID.includes('PEGA_AQUI')){TODOS=JSON.parse(localStorage.getItem('vale_lia_prods')||'[]');render(TODOS);return;}const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}});const d=await r.json();TODOS=d.record||[];render(TODOS);}catch(e){loading.innerText=''}}
+function render(prods){loading.style.display='none';if(prods.length==0){grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#c9a0a0;font-size:10px;letter-spacing:2px;margin-top:40px">Agrega productos en tu admin ✨</p>';return;}grid.innerHTML=prods.map(p=>{const agot=p.status=='agotado';const ofe=p.isOffer||p.status=='oferta'||p.offerPrice;const badge=agot?'<div class="badge agotado">AGOTADO</div>':ofe?'<div class="badge oferta">OFERTA</div>':'';return `<div class="card">${badge}<img src="${p.img}"><div class="info"><b>${p.name}</b><span class="desc">${p.desc||''}</span><br><span class="mat">${(p.categoria||p.material||'').toUpperCase()}</span><span class="price">${p.offerPrice||p.price}${p.offerPrice?`<span class="old">${p.price}</span>`:''}</span><a class="btn ${agot?'agotado':''}" href="https://wa.me/${WHATSAPP}?text=Hola! Me interesa ${encodeURIComponent(p.name)}" target="_blank">${agot?'NO DISPONIBLE':'PEDIR POR WHATSAPP'}</a></div></div>`}).join('')}
+function filtrar(cat,btn){if(btn){document.querySelectorAll('.filtros-menu button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}currentFilter.innerText=cat=='todo'?'COLECCIÓN COMPLETA':cat.toUpperCase();if(cat=='todo'){render(TODOS);}else if(cat=='oferta'){render(TODOS.filter(p=>p.isOffer||p.status=='oferta'||p.offerPrice));}else{render(TODOS.filter(p=
+
