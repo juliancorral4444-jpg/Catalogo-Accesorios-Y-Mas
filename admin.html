@@ -1,12 +1,172 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin VALE&LIA</title>
-<style>body{margin:0;background:#fdf6f2;font-family:system-ui;padding:15px}.box{max-width:520px;margin:0 auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 20px #0001}input,textarea,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ddd;font-size:14px}button{width:100%;padding:13px;background:#5a3a3a;color:#fff;border:none;border-radius:8px;font-weight:700;margin-top:8px;cursor:pointer}img#prev{width:100%;height:280px;object-fit:cover;border-radius:8px;display:none;margin-top:8px}.row{display:flex;gap:8px}.row>div{flex:1}</style></head><body>
-<div class="box" id="log"><h2 style="text-align:center;font-family:serif;letter-spacing:4px;color:#5a3a3a">VALE & LIA ADMIN</h2><input type="password" id="pass" placeholder="Contraseña valelia1234"><button onclick="if(pass.value=='valelia1234'){log.style.display='none';adm.style.display='block';cargar()}else{alert('Mal')}">Entrar</button></div>
-<div class="box" id="adm" style="display:none"><h3>Agregar Producto - Se ve en la nube al instante</h3><input type="file" id="file" accept="image/*"><img id="prev"><input id="name" placeholder="Nombre * Ej: Aretes corazón"><div class="row"><div><input id="price" placeholder="Precio * $120"></div><div><input id="offerPrice" placeholder="Oferta $85 (opcional)"></div></div><textarea id="desc" placeholder="Descripción"></textarea><div class="row"><div><select id="material"><option>Acero inoxidable</option><option>Chapa de oro</option><option>Oro laminado</option><option>Plata 925</option><option>Otro</option></select></div><div><select id="status"><option value="disponible">Disponible</option><option value="oferta">Oferta</option><option value="agotado">Agotado</option></select></div></div><label><input type="checkbox" id="isOffer" style="width:auto"> Marcar como oferta</label><button onclick="guardar()">💾 Guardar en Nube (todas lo ven)</button><div id="lista" style="margin-top:15px"></div><a href="index.html" style="display:block;text-align:center;margin-top:15px;color:#5a3a3a">Ver catálogo elegante</a></div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin VALE & LIA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
+body{margin:0;background:#fffffe;font-family:'Montserrat',sans-serif;padding:20px;color:#3d2424}
+h2{font-weight:400;letter-spacing:6px;text-align:center;margin:10px 0 20px}
+.box{max-width:500px;margin:0 auto;background:#fff;border:1px solid #f0e0e0;padding:20px;border-radius:12px}
+label{font-size:10px;letter-spacing:2px;display:block;margin:14px 0 5px;color:#8a6a6a}
+input,select,textarea{width:100%;padding:11px;border:1px solid #eedddd;border-radius:8px;font-family:'Montserrat';font-size:13px;box-sizing:border-box}
+textarea{height:60px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{width:100%;padding:13px;border:none;border-radius:30px;cursor:pointer;font-size:11px;letter-spacing:2px;margin-top:10px}
+.btn-save{background:#3d2424;color:#fff}
+.btn-clear{background:#fff0f3;color:#8a6a6a;border:1px solid #ffd1d9}
+.preview{margin-top:10px;width:100%;height:200px;object-fit:cover;border-radius:10px;display:none;border:1px solid #eee}
+.lista{max-width:500px;margin:25px auto}
+.item{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #f0e0e0;padding:10px;border-radius:10px;margin-bottom:8px}
+.item img{width:50px;height:50px;object-fit:cover;border-radius:8px}
+.item b{font-size:12px}
+.item span{font-size:9px;color:#999}
+.del{background:#ff6b8a;color:#fff;padding:6px 12px;border-radius:20px;border:none;font-size:10px;cursor:pointer;margin-left:auto}
+</style>
+</head>
+<body>
+<h2>VALE & LIA - ADMIN</h2>
+<div class="box">
+<label>NOMBRE DEL PRODUCTO</label>
+<input id="name" placeholder="Ej: Anillo de oro laminado">
+
+<label>DESCRIPCIÓN CORTA</label>
+<textarea id="desc" placeholder="Ej: Ajustable, no se hace negro"></textarea>
+
+<label>CATEGORÍA *</label>
+<select id="categoria">
+<option value="anillo">Anillo</option>
+<option value="collar">Collar</option>
+<option value="pulso">Pulso / Pulsera</option>
+<option value="arete">Aretes</option>
+<option value="y mas">Y MÁS - bolsas, lentes, diademas, etc</option>
+<option value="otro">Otro</option>
+</select>
+
+<label>MATERIAL</label>
+<select id="material">
+<option>ORO LAMINADO</option>
+<option>PLATA</option>
+<option>ACERO INOXIDABLE</option>
+<option>CHAPA DE ORO</option>
+<option>ACERO + CHAPA</option>
+</select>
+
+<div class="row">
+<div><label>PRECIO</label><input id="price" placeholder="$350"></div>
+<div><label>PRECIO OFERTA (opcional)</label><input id="offerPrice" placeholder="$299"></div>
+</div>
+
+<label>ESTADO</label>
+<select id="status">
+<option value="disponible">Disponible</option>
+<option value="oferta">Oferta</option>
+<option value="agotado">Agotado</option>
+</select>
+
+<label>FOTO (desde tu galería)</label>
+<input type="file" id="file" accept="image/*">
+<img id="preview" class="preview">
+
+<label>O pega LINK de imagen</label>
+<input id="img" placeholder="https://...">
+
+<button class="btn-save" onclick="guardar()">GUARDAR PRODUCTO</button>
+<button class="btn-clear" onclick="limpiarForm()">LIMPIAR FORMULARIO</button>
+<p id="msg" style="font-size:10px;text-align:center;margin-top:10px;color:#b09090"></p>
+</div>
+
+<div class="lista">
+<h3 style="font-size:11px;letter-spacing:3px;text-align:center">PRODUCTOS GUARDADOS (<span id="count">0</span>)</h3>
+<div id="lista"></div>
+<a href="index.html" style="display:block;text-align:center;font-size:10px;letter-spacing:2px;color:#b09090;margin-top:20px;text-decoration:none">← VER TIENDA</a>
+</div>
+
 <script>
-const BIN_ID="PEGA_AQUI_TU_BIN_ID"; const API_KEY="PEGA_AQUI_TU_MASTER_KEY"; let imgData=''; let productos=[];
-file.onchange=e=>{let r=new FileReader(); r.onload=x=>{imgData=x.target.result; prev.src=imgData; prev.style.display='block'}; r.readAsDataURL(e.target.files[0])};
-async function cargar(){let res=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}}); let d=await res.json(); productos=d.record||[]; render()}
-async function guardar(){if(!name.value||!price.value||!imgData){alert('Falta nombre, precio o foto');return} productos.unshift({name:name.value,price:price.value,offerPrice:offerPrice.value,desc:desc.value,material:material.value,status:status.value,isOffer:isOffer.checked,img:imgData,id:Date.now()}); let res=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify(productos)}); if(res.ok){alert('¡Guardado! Tus clientas ya lo ven'); name.value='';price.value='';offerPrice.value='';desc.value='';imgData='';prev.style.display='none';file.value=''; render()}else{alert('Error API Key')} }
-function render(){lista.innerHTML=productos.map((p,i)=>`<div style="display:flex;gap:8px;align-items:center;border:1px solid #eee;padding:6px;border-radius:8px;margin-top:8px"><img src="${p.img}" style="width:45px;height:45px;object-fit:cover;border-radius:6px"><div style="flex:1"><b>${p.name}</b><br><small>${p.price} ${p.offerPrice?'->'+p.offerPrice:''}</small></div><button onclick="borrar(${i})" style="width:auto;background:#b85c5c;padding:5px 10px">X</button></div>`).join('')}
-async function borrar(i){if(!confirm('¿Borrar?'))return; productos.splice(i,1); await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify(productos)}); render()}
-</script></body></html>
+const BIN_ID = "PEGA_AQUI_TU_BIN_ID";
+const API_KEY = "PEGA_AQUI_TU_MASTER_KEY";
+let productos = JSON.parse(localStorage.getItem('vale_lia_prods')||'[]');
+let imgBase64 = "";
+
+file.onchange = function(e){
+  const f = e.target.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    imgBase64 = ev.target.result;
+    preview.src = imgBase64;
+    preview.style.display='block';
+    img.value = "";
+  };
+  reader.readAsDataURL(f);
+};
+
+img.oninput = function(){
+  if(img.value){
+    preview.src = img.value;
+    preview.style.display='block';
+    imgBase64 = "";
+  }
+};
+
+function guardar(){
+  const p = {
+    name: name.value.trim(),
+    desc: desc.value.trim(),
+    categoria: categoria.value,
+    material: material.value,
+    price: price.value.trim(),
+    offerPrice: offerPrice.value.trim(),
+    status: status.value,
+    isOffer: status.value=='oferta' || !!offerPrice.value.trim(),
+    img: imgBase64 || img.value.trim()
+  };
+  if(!p.name || !p.price || !p.img){ msg.innerText='❌ Faltan nombre, precio o foto'; return; }
+
+  productos.unshift(p);
+  localStorage.setItem('vale_lia_prods', JSON.stringify(productos));
+  msg.innerText='✅ Guardado en tu celular. Subiendo a la nube...';
+  pintar();
+  syncNube();
+  limpiarForm();
+}
+
+async function syncNube(){
+  if(BIN_ID.includes('PEGA_AQUI')){ msg.innerText='✅ Guardado local (pon tu BIN ID para verlo en todos los celus)'; return; }
+  try{
+    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},
+      body: JSON.stringify(productos)
+    });
+    msg.innerText='✅ ¡Producto en línea! Ya aparece en tu tienda';
+  }catch(e){ msg.innerText='✅ Guardado local, pero no se pudo subir a la nube'; }
+}
+
+function pintar(){
+  count.innerText = productos.length;
+  lista.innerHTML = productos.map((p,i)=>`
+    <div class="item">
+      <img src="${p.img}">
+      <div><b>${p.name}</b><br><span>${(p.categoria||'').toUpperCase()} - ${p.price}</span></div>
+      <button class="del" onclick="borrar(${i})">X</button>
+    </div>
+  `).join('');
+}
+
+function borrar(i){
+  if(!confirm('¿Borrar este producto?')) return;
+  productos.splice(i,1);
+  localStorage.setItem('vale_lia_prods', JSON.stringify(productos));
+  pintar();
+  syncNube();
+}
+
+function limpiarForm(){
+  name.value=""; desc.value=""; price.value=""; offerPrice.value=""; img.value=""; file.value=""; preview.style.display='none'; imgBase64="";
+}
+
+pintar();
+</script>
+</body>
+</html>
