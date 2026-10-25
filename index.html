@@ -1,50 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VALE & LIA - Accesorios y mas</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VALE & LIA</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400&display=swap');
-body{margin:0;background:#fdf6f2;font-family:'Montserrat',sans-serif}
-.header{background:#f9e8e0;padding:50px 20px;text-align:center;}
-.header h1{font-family:'Cormorant Garamond',serif;font-weight:400;letter-spacing:8px;color:#5a3a3a;margin:0;font-size:38px}
-.header p.sub{letter-spacing:4px;color:#8a6a6a;font-size:12px;margin:5px 0 20px;text-transform:lowercase}
-.header p.slogan{font-family:'Cormorant Garamond',serif;letter-spacing:3px;color:#5a3a3a;font-size:13px;margin:0}
-.container{max-width:1100px;margin:0 auto;padding:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px}
-.card{background:#fff;border-radius:4px;overflow:hidden;position:relative;box-shadow:0 2px 10px #0001}
-.card img{width:100%;height:210px;object-fit:cover}
-.badge{position:absolute;top:10px;left:10px;padding:4px 10px;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px}
-.oferta{background:#b85c5c} .agotado{background:#333}
-.info{padding:12px} .info b{font-family:'Cormorant Garamond',serif;font-size:16px;color:#333}
-.info small.desc{color:#888;font-size:11px;display:block;margin:4px 0}
-.info small.mat{background:#fdf0e9;padding:3px 7px;border-radius:10px;font-size:9px;letter-spacing:1px;color:#8a6a6a}
-.price{font-weight:600;color:#5a3a3a;margin-top:6px;display:block} .old{text-decoration:line-through;color:#bbb;font-size:11px;margin-left:6px}
-.btn-whats{display:block;margin-top:10px;background:#5a3a3a;color:#fff;text-align:center;padding:9px;text-decoration:none;font-size:12px;letter-spacing:1px}
-#loading{text-align:center;color:#b99;padding:40px}
-</style></head>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Poppins:wght@300;400;600&display=swap');
+body{margin:0;background:#ffeef2;font-family:'Poppins',sans-serif;color:#4a2a2a}
+.header{background:#ffeaef;padding:38px 15px;text-align:center;border-bottom:1px solid #ffd6dd}
+.header h1{font-family:'Cormorant Garamond',serif;letter-spacing:10px;font-size:36px;margin:0;color:#4a2a2a;font-weight:500}
+.header .sub{letter-spacing:6px;font-size:11px;color:#8a6a6a;margin:6px 0 14px;text-transform:lowercase}
+.header .slogan{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:3px;line-height:1.6}
+.menu-btn{position:fixed;top:15px;left:15px;z-index:99;background:#fff;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0001;font-size:22px;cursor:pointer}
+.side{position:fixed;top:0;left:-280px;width:260px;height:100%;background:#fff;z-index:100;transition:.3s;padding:20px;box-shadow:0 0 20px #0002}
+.side.open{left:0}
+.side a{display:block;padding:14px 10px;text-decoration:none;color:#4a2a2a;border-bottom:1px solid #ffeaef;font-size:14px;letter-spacing:1px}
+.container{max-width:1100px;margin:0 auto;padding:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px}
+.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px #0001;position:relative}
+.card img{width:100%;height:190px;object-fit:cover}
+.badge{position:absolute;top:8px;left:8px;padding:4px 9px;border-radius:20px;color:#fff;font-size:9px;font-weight:700;letter-spacing:1px}
+.oferta{background:#ff6b8a} .agotado{background:#333}
+.info{padding:10px 10px 12px} .info b{font-size:13px;color:#4a2a2a}
+.info .desc{font-size:10px;color:#8a6a6a;display:block;margin:3px 0}
+.info .mat{font-size:8px;background:#ffeaef;padding:2px 6px;border-radius:10px;color:#b07a7a;letter-spacing:1px}
+.price{color:#ff6b8a;font-weight:700;font-size:13px;margin-top:4px;display:block} .old{color:#bbb;text-decoration:line-through;font-size:10px;margin-left:5px}
+.btn{display:block;margin-top:8px;background:#4a2a2a;color:#fff;text-align:center;padding:9px;border-radius:10px;text-decoration:none;font-size:11px;letter-spacing:1px;font-weight:600}
+.btn.agotado{background:#ccc;pointer-events:none}
+</style>
+</head>
 <body>
+<div class="menu-btn" onclick="document.getElementById('side').classList.toggle('open')">☰</div>
+<div class="side" id="side"><div style="text-align:right;font-size:22px;cursor:pointer" onclick="side.classList.remove('open')">✕</div>
+<h3 style="font-family:serif;letter-spacing:4px;color:#ff6b8a">VALE&LIA</h3>
+<a href="#" onclick="side.classList.remove('open')">✨ INICIO</a>
+<a href="#" onclick="side.classList.remove('open')">💎 CATÁLOGO</a>
+<a href="https://wa.me/5210000000000" target="_blank">💬 WHATSAPP</a>
+<a href="admin.html">🔒 ADMIN</a>
+</div>
+
 <div class="header">
 <h1>VALE & LIA</h1>
 <p class="sub">accesorios y mas</p>
-<p class="slogan">✦ BRILLA CON VALE&LIA ✦<br><br>ORO LAMINADO · PLATA · ACERO INOXIDABLE · CHAPA DE ORO</p>
+<p class="slogan">✦ BRILLA CON VALE&LIA ✦<br>ORO LAMINADO · PLATA · ACERO INOXIDABLE · CHAPA DE ORO</p>
 </div>
-<div class="container"><div id="grid" class="grid"></div><p id="loading">Cargando joyería...</p></div>
+
+<div class="container">
+<div id="grid" class="grid"></div>
+<p id="loading" style="text-align:center;color:#c89;padding:30px">Cargando joyería rosa...</p>
+</div>
+
 <script>
 const BIN_ID = "PEGA_AQUI_TU_BIN_ID";
 const API_KEY = "PEGA_AQUI_TU_MASTER_KEY";
+
 async function load(){
   try{
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}});
-    const data = await res.json(); const prods = data.record || [];
-    document.getElementById('loading').style.display='none';
-    if(prods.length==0){document.getElementById('grid').innerHTML='<p style="text-align:center;color:#b99;width:100%">Aún no hay productos, agrega en tu admin</p>';return}
-    document.getElementById('grid').innerHTML = prods.map(p=>{
-      const agot = p.status=='agotado'; const ofe = p.isOffer || p.status=='oferta';
-      const badge = agot?'<div class="badge agotado">AGOTADO</div>':ofe?'<div class="badge oferta">OFERTA</div>':'';
-      return `<div class="card">${badge}<img src="${p.img}"><div class="info"><b>${p.name}</b><small class="desc">${p.desc||''}</small><small class="mat">${p.material||''}</small><span class="price">${p.offerPrice||p.price}${p.offerPrice?`<span class="old">${p.price}</span>`:''}</span><a class="btn-whats" href="https://wa.me/5210000000000?text=Hola! Me interesa ${encodeURIComponent(p.name)}" target="_blank">${agot?'NO DISPONIBLE':'PEDIR POR WHATSAPP'}</a></div></div>`;
-    }).join('');
-  }catch(e){document.getElementById('loading').innerText='Error: Revisa tu BIN ID y KEY en el código';}
-} load();
+    if(BIN_ID.includes('PEGA_AQUI')){ // modo local mientras no pones tu bin
+      let prods = JSON.parse(localStorage.getItem('vale_lia_prods')||'[]');
+      render(prods); return;
+    }
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}});
+    const d = await r.json();
+    render(d.record||[]);
+  }catch(e){ loading.innerText='Agrega tu BIN ID en el código'; }
+}
+function render(prods){
+  loading.style.display='none';
+  if(prods.length==0){ grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#c89">Aún no hay productos, agrega en tu admin</p>'; return; }
+  grid.innerHTML = prods.map(p=>{
+    const agot = p.status=='agotado';
+    const ofe = p.isOffer || p.status=='oferta' || p.offerPrice;
+    const badge = agot?'<div class="badge agotado">AGOTADO</div>':ofe?'<div class="badge oferta">OFERTA</div>':'';
+    return `<div class="card">${badge}<img src="${p.img}"><div class="info"><b>${p.name}</b><span class="desc">${p.desc||''}</span><span class="mat">${p.material||''}</span><span class="price">${p.offerPrice||p.price}${p.offerPrice?`<span class="old">${p.price}</span>`:''}</span><a class="btn ${agot?'agotado':''}" href="https://wa.me/5210000000000?text=Hola! Me interesa ${encodeURIComponent(p.name)}" target="_blank">${agot?'NO DISPONIBLE':'PEDIR POR WHATSAPP'}</a></div></div>`;
+  }).join('');
+}
+load();
 </script>
-</body></html>
+</body>
+</html>
